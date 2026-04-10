@@ -4,12 +4,14 @@ import RecordingButton from './components/RecordingButton';
 import TranscriptionEditor from './components/TranscriptionEditor';
 import ReportDisplay from './components/ReportDisplay';
 import AnimatedBackground from './components/AnimatedBackground';
+import LandingPage from './components/LandingPage';
 
 // In production (Vercel), API routes are on the same origin at /api/*
 // In dev, Vite proxies /api to localhost:3001
 axios.defaults.baseURL = '';
 
 function App() {
+  const [showLanding, setShowLanding] = useState(true);
   const [doctorName, setDoctorName] = useState('');
   const [isNameSet, setIsNameSet] = useState(false);
 
@@ -25,6 +27,7 @@ function App() {
     if (storedName) {
       setDoctorName(storedName);
       setIsNameSet(true);
+      setShowLanding(false);
       fetchReportsHistory(storedName);
     }
   }, []);
@@ -104,6 +107,10 @@ function App() {
     setCurrentStep('dashboard');
     setReportsHistory([]);
   };
+
+  if (showLanding && !isNameSet) {
+    return <LandingPage onGetStarted={() => setShowLanding(false)} />;
+  }
 
   if (!isNameSet) {
     return (
