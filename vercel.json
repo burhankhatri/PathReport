@@ -2,6 +2,20 @@
   "version": 2,
   "buildCommand": "cd client && npm install && npm run build",
   "outputDirectory": "client/dist",
+  "functions": {
+    "api/transcribe.js": {
+      "maxDuration": 60
+    },
+    "api/generate-report.js": {
+      "maxDuration": 60
+    },
+    "api/generate-pdf.js": {
+      "maxDuration": 60
+    },
+    "api/reports.js": {
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
     {
       "source": "/api/transcribe",
