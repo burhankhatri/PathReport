@@ -1,5 +1,6 @@
 const { createClient } = require('@deepgram/sdk');
 const multiparty = require('multiparty');
+const fs = require('fs');
 
 module.exports = async (req, res) => {
   // Enable CORS
@@ -20,27 +21,50 @@ module.exports = async (req, res) => {
   try {
     const deepgramApiKey = process.env.DEEPGRAM_API_KEY;
     if (!deepgramApiKey) {
+      console.error('Deepgram API key not configured in environment');
       return res.status(500).json({ error: 'Deepgram API key not configured' });
     }
 
     // Parse multipart form data
-    const form = new multiparty.Form();
-    
+    const form = new multiparty.Form({
+      maxFilesSize: 25 * 1024 * 1024, // 25MB limit
+    });
+
     const audioBuffer = await new Promise((resolve, reject) => {
       form.parse(req, (err, fields, files) => {
         if (err) {
-          reject(err);
+          console.error('Multiparty form parse error:', err);
+          reject(new Error(`Form parse error: ${err.message}`));
           return;
         }
-        
+
         if (!files.audio || !files.audio[0]) {
+          console.error('No audio file in request. Files received:', Object.keys(files || {}));
           reject(new Error('No audio file provided'));
           return;
         }
 
-        const fs = require('fs');
-        const buffer = fs.readFileSync(files.audio[0].path);
-        resolve(buffer);
+        const filePath = files.audio[0].path;
+        console.log('Audio file received:', {
+          path: filePath,
+          size: files.audio[0].size,
+          originalFilename: files.audio[0].originalFilename,
+          headers: files.audio[0].headers
+        });
+
+        try {
+          const buffer = fs.readFileSync(filePath);
+          // Clean up temp file
+          try {
+            fs.unlinkSync(filePath);
+          } catch (cleanupErr) {
+            console.warn('Could not clean up temp file:', cleanupErr.message);
+          }
+          resolve(buffer);
+        } catch (readErr) {
+          console.error('Error reading audio file:', readErr);
+          reject(new Error(`Failed to read audio file: ${readErr.message}`));
+        }
       });
     });
 
@@ -80,14 +104,23 @@ module.exports = async (req, res) => {
     );
 
     if (error) {
-      console.error('Deepgram error:', error);
-      return res.status(500).json({ error: 'Transcription failed', details: error.message });
+      console.error('Deepgram API error:', error);
+      return res.status(500).json({
+        error: 'Transcription failed',
+        details: error.message || 'Deepgram API returned an error'
+      });
     }
+
+    console.log('Deepgram response received:', JSON.stringify(result, null, 2).substring(0, 500));
 
     const transcript = result.results?.channels[0]?.alternatives[0]?.transcript;
 
     if (!transcript) {
-      return res.status(500).json({ error: 'No transcription returned' });
+      console.error('No transcript in Deepgram response. Result structure:', JSON.stringify(result, null, 2).substring(0, 1000));
+      return res.status(500).json({
+        error: 'No transcription returned',
+        details: 'Deepgram returned an empty transcript'
+      });
     }
 
     return res.status(200).json({
@@ -99,10 +132,17 @@ module.exports = async (req, res) => {
 
   } catch (error) {
     console.error('Transcription error:', error);
-    return res.status(500).json({ 
-      error: 'Transcription failed', 
-      details: error.message 
+    console.error('Error stack:', error.stack);
+    return res.status(500).json({
+      error: 'Transcription failed',
+      details: error.message || 'Unknown error occurred'
     });
   }
 };
 
+
+module.exports.config = {
+  api: {
+    bodyParser: false,
+  },
+};
