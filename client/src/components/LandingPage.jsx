@@ -16,7 +16,7 @@ const LandingPage = ({ onGetStarted }) => {
           <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
           </div>
-          <span className="text-xl font-bold text-slate-900 tracking-tight">MedExam</span>
+          <span className="text-xl font-bold text-slate-900 tracking-tight">PathReport</span>
         </div>
         <button
           onClick={onGetStarted}
@@ -39,7 +39,7 @@ const LandingPage = ({ onGetStarted }) => {
             <span className="text-blue-600">Get the report instantly.</span>
           </h1>
           <p className="text-lg sm:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed mb-10">
-            Dictate your findings while looking through the microscope. MedExam transcribes and structures them into a clinical report automatically.
+            Dictate your findings while looking through the microscope. PathReport transcribes and structures them into a clinical report automatically.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
@@ -83,7 +83,7 @@ const LandingPage = ({ onGetStarted }) => {
       {/* How it Works */}
       <section id="how-it-works" className="relative z-10 px-6 md:px-12 py-20 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-4">How MedExam works</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-4">How PathReport works</h2>
           <p className="text-slate-500 text-lg max-w-xl mx-auto">Three steps. Eyes never leave the specimen.</p>
         </div>
 
@@ -132,7 +132,7 @@ const LandingPage = ({ onGetStarted }) => {
               <div>
                 <h2 className="text-2xl font-bold text-slate-900 tracking-tight mb-3">No context switching. No forgotten findings.</h2>
                 <p className="text-slate-600 leading-relaxed text-base">
-                  Eyes stay on the specimen, observations go straight into the report. MedExam eliminates the gap between what you see and what you document.
+                  Eyes stay on the specimen, observations go straight into the report. PathReport eliminates the gap between what you see and what you document.
                 </p>
               </div>
             </div>
@@ -192,7 +192,7 @@ const LandingPage = ({ onGetStarted }) => {
             <div className="w-5 h-5 rounded bg-blue-600 flex items-center justify-center">
               <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
             </div>
-            MedExam
+            PathReport
           </div>
           <p className="text-xs text-slate-400">Powered by Deepgram Nova-3 Medical & Claude AI</p>
         </div>
