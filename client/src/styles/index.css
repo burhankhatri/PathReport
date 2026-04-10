@@ -4,59 +4,59 @@
 
 @layer base {
   body {
-    @apply bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 min-h-screen;
+    @apply bg-sidebar-bg text-gray-800 m-0 p-0 overflow-hidden font-sans;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold px-6 py-3 rounded-xl 
+    @apply bg-indigo-600 text-white font-semibold px-6 py-3 rounded-xl 
            shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 
            active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
   }
   
   .btn-secondary {
     @apply bg-white text-gray-700 font-medium px-6 py-3 rounded-xl border-2 border-gray-200
-           shadow-md hover:shadow-lg hover:border-blue-300 transform hover:scale-105 
+           shadow-md hover:shadow-lg hover:border-indigo-300 transform hover:scale-105 
            transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
   }
   
   .card {
-    @apply bg-white rounded-2xl shadow-xl p-6 border border-gray-100;
+    @apply bg-white rounded-3xl shadow-sm p-6 border border-gray-50;
   }
   
   .input-field {
-    @apply w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 
-           focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all duration-200;
+    @apply w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-indigo-500 
+           focus:outline-none focus:ring-2 focus:ring-indigo-200 transition-all duration-200;
   }
   
   .textarea-field {
-    @apply w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 
-           focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all duration-200
+    @apply w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-indigo-500 
+           focus:outline-none focus:ring-2 focus:ring-indigo-200 transition-all duration-200
            resize-none;
   }
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-400 rounded-full;
+  @apply bg-gray-300 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-500;
+  @apply bg-gray-400;
 }
 
 /* Smooth transitions */
 * {
-  @apply transition-colors duration-150;
+  @apply transition-all duration-200;
 }
 

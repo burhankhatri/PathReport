@@ -169,7 +169,7 @@ const RecordingButton = ({ onRecordingComplete }) => {
             transform transition-all duration-300 shadow-2xl
             ${isRecording 
               ? 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 scale-100' 
-              : 'bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105'
+              : 'bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 hover:scale-105'
             }
             ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'active:scale-95'}
           `}
@@ -208,7 +208,7 @@ const RecordingButton = ({ onRecordingComplete }) => {
           <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-32">
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-100"
+                className="h-full bg-gradient-to-r from-indigo-400 to-indigo-600 transition-all duration-100"
                 style={{ width: `${Math.min((audioLevel / 128) * 100, 100)}%` }}
               ></div>
             </div>
@@ -258,13 +258,13 @@ const RecordingButton = ({ onRecordingComplete }) => {
 
       {/* Tips */}
       {!isRecording && !isProcessing && (
-        <div className="mt-8 p-4 bg-blue-50 border-2 border-blue-200 rounded-xl max-w-md">
-          <h3 className="font-semibold text-blue-900 mb-2">Tips for best results:</h3>
-          <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+        <div className="mt-8 p-4 bg-indigo-50 border-2 border-indigo-200 rounded-xl max-w-md">
+          <h3 className="font-semibold text-indigo-900 mb-2">Tips for best results:</h3>
+          <ul className="text-sm text-indigo-800 space-y-1 list-disc list-inside">
             <li>Speak in a quiet environment</li>
             <li>Use medical terminology naturally</li>
             <li>Speak at a normal, steady pace</li>
-            <li>Hold your phone 6-8 inches from your mouth</li>
+            <li>Hold your microphone 6-8 inches from your mouth</li>
           </ul>
         </div>
       )}

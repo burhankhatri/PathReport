@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ReportDisplay = ({ transcription, onStartOver }) => {
+const ReportDisplay = ({ transcription, onStartOver, onReportSaved }) => {
   const [report, setReport] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -23,6 +23,9 @@ const ReportDisplay = ({ transcription, onStartOver }) => {
 
       if (response.data.success && response.data.report) {
         setReport(response.data.report);
+        if (onReportSaved) {
+          onReportSaved(response.data.report);
+        }
       } else {
         setError('Failed to generate report. Please try again.');
       }
@@ -88,10 +91,10 @@ const ReportDisplay = ({ transcription, onStartOver }) => {
     return (
       <div className="flex flex-col items-center justify-center py-16 space-y-6">
         <div className="relative">
-          <div className="w-20 h-20 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+          <div className="w-20 h-20 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
           <div className="absolute inset-0 flex items-center justify-center">
             <svg 
-              className="w-8 h-8 text-blue-600" 
+              className="w-8 h-8 text-indigo-600" 
               fill="currentColor" 
               viewBox="0 0 20 20"
             >
@@ -155,7 +158,7 @@ const ReportDisplay = ({ transcription, onStartOver }) => {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-900">Medical Report</h2>
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
             <svg 
               className="w-4 h-4 mr-1" 
               fill="currentColor" 
@@ -173,8 +176,8 @@ const ReportDisplay = ({ transcription, onStartOver }) => {
       </div>
 
       {/* Success Message */}
-      <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
-        <p className="text-sm text-green-900">
+      <div className="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-4">
+        <p className="text-sm text-indigo-900">
           <span className="font-semibold">Report generated successfully!</span>
           <br />
           Review the formatted report below and download or copy as needed.
@@ -276,8 +279,8 @@ const ReportDisplay = ({ transcription, onStartOver }) => {
       </div>
 
       {/* Info Box */}
-      <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
-        <p className="text-xs text-blue-900">
+      <div className="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-4">
+        <p className="text-xs text-indigo-900">
           <span className="font-semibold">Note:</span> This report is generated for immediate use and is not stored on our servers. 
           Make sure to save a copy before creating a new report.
         </p>
