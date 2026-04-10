@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
       }
 
       const rows = await sql`
-        SELECT * FROM reports WHERE doctor_name = ${doctor} ORDER BY date DESC
+        SELECT * FROM reports WHERE LOWER(doctor_name) = LOWER(${doctor}) ORDER BY date DESC
       `;
 
       const reports = rows.map(row => ({

@@ -41,32 +41,11 @@ router.post('/', upload.single('audio'), async (req, res) => {
     const { result, error } = await deepgram.listen.prerecorded.transcribeFile(
       req.file.buffer,
       {
-        model: 'nova-2',
+        model: 'nova-3-medical',
         smart_format: true,
         punctuate: true,
         diarize: false,
         language: 'en',
-        // Enhanced for medical terminology
-        keywords: [
-          'anemia:2',
-          'leukocytes:2',
-          'neutropenia:2',
-          'lymphocytes:2',
-          'platelets:2',
-          'blasts:2',
-          'erythroid:2',
-          'myeloid:2',
-          'megakaryocytes:2',
-          'cellularity:2',
-          'dyspoiesis:2',
-          'anisopoikilocytosis:2',
-          'dacrocytes:2',
-          'hypercellular:2',
-          'hypocellular:2',
-          'normocytic:2',
-          'microcytic:2',
-          'macrocytic:2'
-        ].join(',')
       }
     );
 

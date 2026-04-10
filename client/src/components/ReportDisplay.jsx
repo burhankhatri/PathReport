@@ -22,9 +22,30 @@ const ReportDisplay = ({ transcription, onStartOver, onReportSaved }) => {
       });
 
       if (response.data.success && response.data.report) {
-        setReport(response.data.report);
+        const reportText = response.data.report;
+        // Detect if Claude couldn't generate a proper report
+        const refusalPhrases = [
+          'cannot create',
+          'unable to create',
+          'cannot generate',
+          'unable to generate',
+          'impossible to determine',
+          'not enough information',
+          'insufficient',
+          'please provide a clearer',
+        ];
+        const isRefusal = refusalPhrases.some(phrase =>
+          reportText.toLowerCase().includes(phrase)
+        );
+
+        if (isRefusal) {
+          setError('Your transcription didn\'t contain enough clinical detail to generate a structured report. Try recording again with specific observations — for example, describe the specimen type, cell morphology, and any abnormalities you see.');
+          return;
+        }
+
+        setReport(reportText);
         if (onReportSaved) {
-          onReportSaved(response.data.report);
+          onReportSaved(reportText);
         }
       } else {
         setError('Failed to generate report. Please try again.');

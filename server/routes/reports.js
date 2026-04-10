@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     }
 
     const result = await pool.query(
-      'SELECT * FROM reports WHERE doctor_name = $1 ORDER BY date DESC',
+      'SELECT * FROM reports WHERE LOWER(doctor_name) = LOWER($1) ORDER BY date DESC',
       [doctor]
     );
 

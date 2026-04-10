@@ -53,8 +53,15 @@ function App() {
     }
   };
 
+  const sampleTranscription = `I'm looking at the peripheral blood smear. There is marked normocytic anemia with moderate anisopoikilocytosis including dacrocytes and occasional schistocytes. The leukocytes are markedly decreased with absolute neutropenia. The differential shows predominantly mature lymphocytes comprising approximately 80 percent. Occasional reactive lymphocytes are noted. No circulating blasts are identified. Platelets are moderately decreased with no significant morphologic abnormalities. No platelet clumping is seen. Moving to the bone marrow aspirate, the marrow is hypocellular for age, estimated at approximately 15 to 20 percent cellularity. The myeloid to erythroid ratio is decreased. Erythroid precursors show megaloblastic changes with nuclear-cytoplasmic dyssynchrony. Myeloid maturation is present but decreased, with mild left shift. Megakaryocytes are markedly reduced in number. No increase in blasts is identified. Iron stores are adequate.`;
+
   const handleRecordingComplete = (transcript) => {
     setTranscription(transcript);
+    setCurrentStep('edit');
+  };
+
+  const handleUseSample = () => {
+    setTranscription(sampleTranscription);
     setCurrentStep('edit');
   };
 
@@ -398,7 +405,7 @@ function App() {
                 {/* Step Content */}
                 <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200/60 p-8 sm:p-10 min-h-[500px]">
                   {currentStep === 'record' && (
-                    <RecordingButton onRecordingComplete={handleRecordingComplete} />
+                    <RecordingButton onRecordingComplete={handleRecordingComplete} onUseSample={handleUseSample} />
                   )}
 
                   {currentStep === 'edit' && (
