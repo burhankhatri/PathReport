@@ -1,27 +1,9 @@
 {
   "version": 2,
-  "buildCommand": "cd client && npm install && npm run build",
+  "installCommand": "npm install && cd client && npm install",
+  "buildCommand": "cd client && npm run build",
   "outputDirectory": "client/dist",
   "rewrites": [
-    {
-      "source": "/api/transcribe",
-      "destination": "/api/transcribe"
-    },
-    {
-      "source": "/api/generate-report",
-      "destination": "/api/generate-report"
-    },
-    {
-      "source": "/api/generate-pdf",
-      "destination": "/api/generate-pdf"
-    },
-    {
-      "source": "/api/reports",
-      "destination": "/api/reports"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }

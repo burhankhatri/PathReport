@@ -128,10 +128,14 @@ module.exports = async (req, res) => {
 
   } catch (error) {
     console.error('Report generation error:', error);
-    return res.status(500).json({ 
-      error: 'Report generation failed', 
-      details: error.message 
+    return res.status(500).json({
+      error: 'Report generation failed',
+      details: error.message
     });
   }
+};
+
+module.exports.config = {
+  maxDuration: 60,
 };
 

@@ -5,8 +5,9 @@ import TranscriptionEditor from './components/TranscriptionEditor';
 import ReportDisplay from './components/ReportDisplay';
 import AnimatedBackground from './components/AnimatedBackground';
 
-// Set base URL for axios to point to the backend if needed (in dev it's proxied, but good to ensure API path)
-axios.defaults.baseURL = 'http://localhost:3001';
+// In production (Vercel), API routes are on the same origin at /api/*
+// In dev, Vite proxies /api to localhost:3001
+axios.defaults.baseURL = '';
 
 function App() {
   const [doctorName, setDoctorName] = useState('');
