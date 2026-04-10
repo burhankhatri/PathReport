@@ -1,41 +1,19 @@
 {
   "version": 2,
-  "buildCommand": "cd client && npm install && npm run build",
+  "framework": null,
+  "installCommand": "npm install && cd client && npm install",
+  "buildCommand": "cd client && npm run build",
   "outputDirectory": "client/dist",
   "functions": {
-    "api/transcribe.js": {
+    "api/*.js": {
       "maxDuration": 60
-    },
-    "api/generate-report.js": {
-      "maxDuration": 60
-    },
-    "api/generate-pdf.js": {
-      "maxDuration": 60
-    },
-    "api/reports.js": {
-      "maxDuration": 30
     }
   },
   "rewrites": [
-    {
-      "source": "/api/transcribe",
-      "destination": "/api/transcribe"
-    },
-    {
-      "source": "/api/generate-report",
-      "destination": "/api/generate-report"
-    },
-    {
-      "source": "/api/generate-pdf",
-      "destination": "/api/generate-pdf"
-    },
-    {
-      "source": "/api/reports",
-      "destination": "/api/reports"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/api/transcribe", "destination": "/api/transcribe.js" },
+    { "source": "/api/generate-report", "destination": "/api/generate-report.js" },
+    { "source": "/api/generate-pdf", "destination": "/api/generate-pdf.js" },
+    { "source": "/api/reports", "destination": "/api/reports.js" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
