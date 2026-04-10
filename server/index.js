@@ -1,13 +1,18 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const { initDb } = require('./db');
 const transcribeRouter = require('./routes/transcribe');
 const generateReportRouter = require('./routes/generate-report');
 const generatePdfRouter = require('./routes/generate-pdf');
+const reportsRouter = require('./routes/reports');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+
+// Initialize Database
+initDb();
 
 // Middleware
 app.use(cors({
@@ -33,12 +38,13 @@ app.get('/health', (req, res) => {
 app.use('/api/transcribe', transcribeRouter);
 app.use('/api/generate-report', generateReportRouter);
 app.use('/api/generate-pdf', generatePdfRouter);
+app.use('/api/reports', reportsRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Server error:', err);
   
-  if (err instanceof multer.MulterError) {
+  if (err.name === 'MulterError') {
     return res.status(400).json({ 
       error: 'File upload error', 
       details: err.message 
@@ -64,4 +70,3 @@ app.listen(PORT, () => {
   console.log(`   - Anthropic: ${process.env.ANTHROPIC_API_KEY ? '✓' : '✗'}`);
   console.log(`   - Deepgram: ${process.env.DEEPGRAM_API_KEY ? '✓' : '✗'}`);
 });
-

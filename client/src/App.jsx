@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import RecordingButton from './components/RecordingButton';
 import TranscriptionEditor from './components/TranscriptionEditor';
 import ReportDisplay from './components/ReportDisplay';
 import AnimatedBackground from './components/AnimatedBackground';
+
+// Set base URL for axios to point to the backend if needed (in dev it's proxied, but good to ensure API path)
+axios.defaults.baseURL = 'http://localhost:3001';
 
 function App() {
   const [doctorName, setDoctorName] = useState('');
@@ -13,22 +17,38 @@ function App() {
   const [report, setReport] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [reportsHistory, setReportsHistory] = useState([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
   useEffect(() => {
     const storedName = localStorage.getItem('doctorName');
     if (storedName) {
       setDoctorName(storedName);
       setIsNameSet(true);
+      fetchReportsHistory(storedName);
     }
-    const storedHistory = JSON.parse(localStorage.getItem('reportsHistory') || '[]');
-    setReportsHistory(storedHistory);
   }, []);
+
+  const fetchReportsHistory = async (name) => {
+    setIsLoadingHistory(true);
+    try {
+      const response = await axios.get(`/api/reports?doctor=${encodeURIComponent(name)}`);
+      if (response.data.success) {
+        setReportsHistory(response.data.reports);
+      }
+    } catch (error) {
+      console.error('Error fetching reports:', error);
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  };
 
   const handleNameSubmit = (e) => {
     e.preventDefault();
     if (doctorName.trim()) {
-      localStorage.setItem('doctorName', doctorName.trim());
+      const name = doctorName.trim();
+      localStorage.setItem('doctorName', name);
       setIsNameSet(true);
+      fetchReportsHistory(name);
     }
   };
 
@@ -46,17 +66,20 @@ function App() {
     setCurrentStep('report');
   };
 
-  const handleReportSaved = (newReportData) => {
-    const newReport = {
-      id: `EXAM-${Math.floor(1000 + Math.random() * 9000)}`,
-      date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' }),
-      report: newReportData,
-      doctor: doctorName
-    };
-    const history = JSON.parse(localStorage.getItem('reportsHistory') || '[]');
-    const updatedHistory = [newReport, ...history];
-    localStorage.setItem('reportsHistory', JSON.stringify(updatedHistory));
-    setReportsHistory(updatedHistory);
+  const handleReportSaved = async (newReportData) => {
+    const newReportId = `EXAM-${Math.floor(1000 + Math.random() * 9000)}`;
+    
+    try {
+      await axios.post('/api/reports', {
+        id: newReportId,
+        doctor: doctorName,
+        report: newReportData
+      });
+      // Refresh history from server
+      await fetchReportsHistory(doctorName);
+    } catch (error) {
+      console.error('Error saving report to DB:', error);
+    }
   };
 
   const handleStartOver = () => {
@@ -71,6 +94,7 @@ function App() {
     setDoctorName('');
     setIsNameSet(false);
     setCurrentStep('dashboard');
+    setReportsHistory([]);
   };
 
   if (!isNameSet) {
@@ -222,13 +246,13 @@ function App() {
                 {/* Stat Cards */}
                 <div className="rounded-2xl bg-white border border-slate-200/60 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] p-6 flex flex-col justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-slate-500 mb-1">Total Reports</p>
-                    <h3 className="text-3xl font-bold text-slate-900 tracking-tight">{reportsHistory.length > 0 ? reportsHistory.length + 1248 : 1248}</h3>
+                    <p className="text-sm font-semibold text-slate-500 mb-1">Your Total Reports</p>
+                    <h3 className="text-3xl font-bold text-slate-900 tracking-tight">{reportsHistory.length}</h3>
                   </div>
                   <div className="mt-4 pt-4 border-t border-slate-100">
                     <p className="text-xs font-medium text-blue-600 flex items-center gap-1">
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-                      +{reportsHistory.length} this session
+                      Recorded in system
                     </p>
                   </div>
                 </div>
@@ -253,7 +277,11 @@ function App() {
                     <button onClick={() => setCurrentStep('history')} className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">View All Archive</button>
                   </div>
                   <div className="flex-1 overflow-auto max-h-[300px]">
-                    {reportsHistory.slice(0, 4).length > 0 ? (
+                    {isLoadingHistory ? (
+                      <div className="flex justify-center items-center h-full py-12">
+                         <div className="w-8 h-8 border-[3px] border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
+                      </div>
+                    ) : reportsHistory.slice(0, 4).length > 0 ? (
                       <div className="divide-y divide-slate-100">
                         {reportsHistory.slice(0, 4).map((item, i) => (
                           <div key={i} className="px-6 py-4 flex items-center justify-between hover:bg-slate-50/80 transition-colors cursor-pointer group">
@@ -275,7 +303,7 @@ function App() {
                     ) : (
                       <div className="flex flex-col items-center justify-center h-full text-slate-400 py-12">
                         <svg className="w-12 h-12 mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                        <p className="text-sm font-medium">No recent cases in this session.</p>
+                        <p className="text-sm font-medium">No recent cases found.</p>
                       </div>
                     )}
                   </div>
@@ -286,13 +314,17 @@ function App() {
             {currentStep === 'history' && (
               <div className="animate-fade-in space-y-6">
                 <div className="bg-white rounded-2xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-slate-200/60 p-8 min-h-[500px]">
-                  {reportsHistory.length === 0 ? (
+                  {isLoadingHistory ? (
+                     <div className="flex justify-center items-center h-full py-24">
+                       <div className="w-12 h-12 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
+                     </div>
+                  ) : reportsHistory.length === 0 ? (
                     <div className="text-center py-24">
                       <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-5 border border-slate-100">
                         <svg className="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                       </div>
                       <h3 className="text-xl font-bold text-slate-900 tracking-tight">No Reports Found</h3>
-                      <p className="text-slate-500 mt-2 text-sm max-w-sm mx-auto">You haven't generated any reports in this session yet. Start a new examination to create one.</p>
+                      <p className="text-slate-500 mt-2 text-sm max-w-sm mx-auto">You haven't generated any reports in the system yet. Start a new examination to create one.</p>
                       <button 
                         onClick={() => setCurrentStep('record')}
                         className="mt-6 bg-white border border-slate-300 text-slate-700 px-5 py-2.5 rounded-lg font-medium text-sm hover:bg-slate-50 transition-colors shadow-sm"
