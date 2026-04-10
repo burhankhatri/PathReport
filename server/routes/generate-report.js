@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
 
     // Generate the report using Claude
     const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-3-5-sonnet-20241022',
       max_tokens: 4096,
       temperature: 0.3, // Lower temperature for more consistent medical formatting
       messages: [
