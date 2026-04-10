@@ -16,6 +16,10 @@
       "destination": "/api/generate-pdf"
     },
     {
+      "source": "/api/reports",
+      "destination": "/api/reports"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
