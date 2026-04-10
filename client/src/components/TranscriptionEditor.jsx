@@ -44,8 +44,8 @@ const TranscriptionEditor = ({ transcription, onEdit, onGenerateReport, onBack }
       </div>
 
       {/* Instructions */}
-      <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
-        <p className="text-sm text-blue-900">
+      <div className="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-4">
+        <p className="text-sm text-indigo-900">
           <span className="font-semibold">Review and edit your transcription</span>
           <br />
           Correct any errors or add additional details before generating the final report.
@@ -140,9 +140,9 @@ const TranscriptionEditor = ({ transcription, onEdit, onGenerateReport, onBack }
       </div>
 
       {/* Tips */}
-      <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
-        <h3 className="font-semibold text-green-900 mb-2 text-sm">Editing Tips:</h3>
-        <ul className="text-xs text-green-800 space-y-1 list-disc list-inside">
+      <div className="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-4">
+        <h3 className="font-semibold text-indigo-900 mb-2 text-sm">Editing Tips:</h3>
+        <ul className="text-xs text-indigo-800 space-y-1 list-disc list-inside">
           <li>Check for any misheard medical terms</li>
           <li>Ensure percentages and measurements are accurate</li>
           <li>Add any observations you may have forgotten to mention</li>
