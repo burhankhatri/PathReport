@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import gsap from 'gsap';
+import { Analytics } from '@vercel/analytics/react';
 import RecordingButton from './components/RecordingButton';
 import TranscriptionEditor from './components/TranscriptionEditor';
 import ReportDisplay from './components/ReportDisplay';
@@ -141,40 +142,48 @@ function App() {
   };
 
   if (showLanding && !isNameSet) {
-    return <LandingPage onGetStarted={() => setShowLanding(false)} />;
+    return (
+      <>
+        <LandingPage onGetStarted={() => setShowLanding(false)} />
+        <Analytics />
+      </>
+    );
   }
 
   if (!isNameSet) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#0A0A0A] relative overflow-hidden noise-overlay">
-        <AnimatedBackground />
-        <div ref={cursorGlowRef} className="fixed w-[800px] h-[800px] rounded-full pointer-events-none z-0 hidden md:block"
-          style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)' }} />
-        <div ref={loginRef} className="relative z-10 w-full max-w-lg px-6">
-          <div className="card p-12 sm:p-16">
-            <div className="text-center mb-12">
-              <h1 className="login-title font-serif text-4xl text-white tracking-tight">PathReport</h1>
-              <p className="login-title text-neutral-500 mt-3 text-base">Clinical Pathology & Reporting</p>
-            </div>
-            <form onSubmit={handleNameSubmit} className="login-form space-y-8">
-              <div>
-                <label className="block text-base font-medium text-neutral-400 mb-3">Attending Physician / Pathologist</label>
-                <input
-                  type="text"
-                  value={doctorName}
-                  onChange={(e) => setDoctorName(e.target.value)}
-                  placeholder="e.g. Dr. Sarah Jenkins"
-                  className="input-field"
-                  required
-                />
+      <>
+        <div className="flex items-center justify-center min-h-screen bg-[#0A0A0A] relative overflow-hidden noise-overlay">
+          <AnimatedBackground />
+          <div ref={cursorGlowRef} className="fixed w-[800px] h-[800px] rounded-full pointer-events-none z-0 hidden md:block"
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)' }} />
+          <div ref={loginRef} className="relative z-10 w-full max-w-lg px-6">
+            <div className="card p-12 sm:p-16">
+              <div className="text-center mb-12">
+                <h1 className="login-title font-serif text-4xl text-white tracking-tight">PathReport</h1>
+                <p className="login-title text-neutral-500 mt-3 text-base">Clinical Pathology & Reporting</p>
               </div>
-              <button type="submit" className="w-full btn-primary py-4 text-base">
-                Access Dashboard
-              </button>
-            </form>
+              <form onSubmit={handleNameSubmit} className="login-form space-y-8">
+                <div>
+                  <label className="block text-base font-medium text-neutral-400 mb-3">Attending Physician / Pathologist</label>
+                  <input
+                    type="text"
+                    value={doctorName}
+                    onChange={(e) => setDoctorName(e.target.value)}
+                    placeholder="e.g. Dr. Sarah Jenkins"
+                    className="input-field"
+                    required
+                  />
+                </div>
+                <button type="submit" className="w-full btn-primary py-4 text-base">
+                  Access Dashboard
+                </button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+        <Analytics />
+      </>
     );
   }
 
@@ -396,6 +405,7 @@ function App() {
           </div>
         </main>
       </div>
+      <Analytics />
     </div>
   );
 }
